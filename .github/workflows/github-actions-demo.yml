@@ -6,7 +6,7 @@ on:
 
 env:
   GKE_CLUSTER_NAME: i4t-cluster
-  DOCKER_IMAGE_NAME: nginx
+  DOCKER_IMAGE_NAME: nginx:latest
 
 jobs:
   deploy:
