@@ -16,10 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Authenticate with Google Cloud
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.3.0
+      - name: Checkout setup-gcloud action
+        uses: actions/checkout@v2
         with:
-          project_id: i4t-task-by-chathushka-rodrigo
+          repository: GoogleCloudPlatform/github-actions
+          ref: v0.3.0
+          path: .github/actions/setup-gcloud
+
+      - name: Authenticate with Google Cloud
+        uses: .github/actions/setup-gcloud
+        with:
+          project_id:i4t-task-by-chathushka-rodrigo
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
