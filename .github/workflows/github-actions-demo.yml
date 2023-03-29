@@ -49,12 +49,12 @@ jobs:
         location: us-central1-c 
         credentials: ${{ secrets.GCP_SA_KEY }}
 
-    # Build Docker Image
+   
     - uses: docker/build-push-action@v2
         with:
           context: .
-          push: true
-          tags: ${{ env.NGINX_IMAGE }}
+          dockerfile: ./dockerfile
+          tags: nginx:latest
 
 
    
