@@ -16,7 +16,7 @@ on:
 
 env:
   
-  GKE_CLUSTER: i4t-cluster   
+  GKE_CLUSTER: i4t-cluster2   
   DOCKER_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
