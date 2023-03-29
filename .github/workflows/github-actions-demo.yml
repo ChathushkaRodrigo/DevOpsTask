@@ -20,7 +20,7 @@ env:
   GKE_ZONE: us-central1-c   # Add your cluster zone here.
   DEPLOYMENT_NAME: test-deployment # Add your deployment name here.
   IMAGE: static-site
-
+   NGINX_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
@@ -48,5 +48,14 @@ jobs:
         cluster_name: i4t-cluster
         location: us-central1-c 
         credentials: ${{ secrets.GCP_SA_KEY }}
+
+    # Build Docker Image
+    - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.NGINX_IMAGE }}
+          
 
    
