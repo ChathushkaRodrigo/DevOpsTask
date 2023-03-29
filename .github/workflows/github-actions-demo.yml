@@ -20,8 +20,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: chathushkarodrigo
-          password: madduseni123
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -31,7 +31,7 @@ jobs:
           tags: ${{ env.DOCKER_USERNAME }}/nginx:${{ github.sha }}
           # Replace the above line with the following if you want to tag the image with "latest":
           # tags: ${{ env.DOCKER_USERNAME }}/nginx:latest
-      
+
       - name: Deploy Docker image
         run: |
           docker run -d -p 80:80 ${{ env.DOCKER_USERNAME }}/nginx:${{ github.sha }}
