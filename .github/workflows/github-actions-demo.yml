@@ -50,8 +50,7 @@ jobs:
         credentials: ${{ secrets.GCP_SA_KEY }}
 
     # Build Docker Image
-    - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+    - uses: docker/build-push-action@v2
         with:
           context: .
           push: true
