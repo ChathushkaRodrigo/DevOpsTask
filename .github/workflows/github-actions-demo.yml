@@ -59,14 +59,15 @@ jobs:
     
     # Push the docker image to GCP Cluster
     - name: Push Nginx Docker image to GCP container registry
-        env:
-          PROJECT_ID: i4t-task-by-chathushka-rodrigo
-          IMAGE_NAME: nginx
-          TAG: latest
+      env:
+        PROJECT_ID: your-project-id
+        IMAGE_NAME: nginx
+        TAG: latest
       run: |
         gcloud auth configure-docker
         docker tag nginx:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
         docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
+
     
   
 
