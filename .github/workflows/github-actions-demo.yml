@@ -1,0 +1,72 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  
+  GKE_CLUSTER: i4t-cluster2 
+  DOCKER_IMAGE: nginx:latest
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: i4t-task-by-chathushka-rodrigo
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+      with:
+        cluster_name: i4t-cluster2
+        location: us-central1
+        credentials: ${{ secrets.GCP_SA_KEY }}
+
+    # Pull the Docker Image
+    - name: Pull Nginx Docker image
+      run: docker pull ${{  env.DOCKER_IMAGE }}
+
+    # View the docker image
+    - name: List all docker images to verify creation
+      run: docker images
+    
+    # Push the docker image to GCP Cluster Registry 
+    - name: Push Nginx Docker image to GCP container registry
+      env:
+        PROJECT_ID: i4t-task-by-chathushka-rodrigo
+        IMAGE_NAME: nginx
+        TAG: latest
+      run: |
+        gcloud auth configure-docker
+        docker tag nginx:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
+
+    
+  
+
+
+   
