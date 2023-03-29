@@ -7,8 +7,8 @@ on:
 
 env:
   NGINX_IMAGE: nginx:latest
-  DOCKER_USERNAME: chathushkarodrigo
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_USERNAME:  ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
   build-and-deploy:
