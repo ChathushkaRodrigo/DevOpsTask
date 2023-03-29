@@ -49,12 +49,10 @@ jobs:
         location: us-central1-c 
         credentials: ${{ secrets.GCP_SA_KEY }}
 
-   
-    - uses: docker/build-push-action@v2
-      with:
-          context: .
-          dockerfile: ./dockerfile
-          tags: nginx:latest
+    # Pull the Docker Image
+    - name: Pull Nginx Docker image
+        run: docker pull nginx:latest
+  
 
 
    
