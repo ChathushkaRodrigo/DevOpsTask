@@ -16,8 +16,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Set up GKE
-         uses: google-github-actions/setup-gcloud@v1
+      - name: Deploy to GKE
+        uses: google-github-actions/deploy-cloud-run@v1.3.0
         with:
           project_id: i4t-task-by-chathushka-rodrigo
           zone: us-central1-c
