@@ -16,7 +16,7 @@ on:
 
 env:
   
-  GKE_CLUSTER: i4t-cluster2   
+  GKE_CLUSTER: i4t-cluster2 
   DOCKER_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
@@ -43,7 +43,7 @@ jobs:
     - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
       with:
         cluster_name: i4t-cluster2
-        location: us-central1-c 
+        location: us-central1
         credentials: ${{ secrets.GCP_SA_KEY }}
 
     # Pull the Docker Image
