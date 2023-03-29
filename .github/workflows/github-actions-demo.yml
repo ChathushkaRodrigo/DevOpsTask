@@ -1,4 +1,4 @@
-name: Deploy to GKE
+name: Deploy Nginx Docker image
 
 on:
   push:
@@ -6,44 +6,34 @@ on:
       - main
 
 env:
-  GKE_CLUSTER: i4t-cluster
   NGINX_IMAGE: nginx:latest
+  DOCKER_USERNAME: chathushkarodrigo
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Set up GKE
-        uses: google-github-actions/setup-gcloud@v0.3.0
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: i4t-task-by-chathushka-rodrigo
-          zone: us-central1-c
-      
-      - name: Set up kubectl
-        uses: google-github-actions/setup-kubectl@v1.1.1
-        with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: i4t-task-by-chathushka-rodrigo
-          zone: us-central1-c
-          cluster_name: ${{ env.GKE_CLUSTER }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ env.NGINX_IMAGE }}
-
-      - name: Deploy to GKE
-        uses: GoogleCloudPlatform/github-actions/deploy-cloud-run@main
-        with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
-          project_id: i4t-task-by-chathushka-rodrigo
-          location: us-central1-c
-          image: ${{ env.NGINX_IMAGE }}
-          service: nginx
-          port: 80
+          tags: ${{ env.DOCKER_USERNAME }}/nginx:${{ github.sha }}
+          # Replace the above line with the following if you want to tag the image with "latest":
+          # tags: ${{ env.DOCKER_USERNAME }}/nginx:latest
+      
+      - name: Deploy Docker image
+        run: |
+          docker run -d -p 80:80 ${{ env.DOCKER_USERNAME }}/nginx:${{ github.sha }}
+          # Replace the above line with the following if you're running Docker on a remote server:
+          # docker run -d -p 80:80 ${{ env.DOCKER_USERNAME }}/nginx:latest
