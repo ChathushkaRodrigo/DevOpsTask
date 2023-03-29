@@ -51,7 +51,7 @@ jobs:
       run: docker pull ${{  env.DOCKER_IMAGE }}
 
     # View the docker image
-    - name: LS docker image
+    - name: List all docker images to verify creation
       run: docker images
     
     # Push the docker image to GCP Cluster Registry 
