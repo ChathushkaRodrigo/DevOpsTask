@@ -17,7 +17,7 @@ on:
 env:
   
   GKE_CLUSTER: i4t-cluster   
-  NGINX_IMAGE: nginx:latest
+  DOCKER_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
@@ -48,7 +48,7 @@ jobs:
 
     # Pull the Docker Image
     - name: Pull Nginx Docker image
-      run: docker pull nginx:latest
+      run: docker pull ${{  env.DOCKER_IMAGE }}
 
     # View the docker image
     - name: LS docker image
