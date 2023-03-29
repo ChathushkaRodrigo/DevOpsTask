@@ -15,11 +15,8 @@ on:
       - main
 
 env:
-  PROJECT_ID: i4t-task-by-chathushka-rodrigo
-  GKE_CLUSTER: i4t-cluster    # Add your cluster name here.
-  GKE_ZONE: us-central1-c   # Add your cluster zone here.
-  DEPLOYMENT_NAME: test-deployment # Add your deployment name here.
-  IMAGE: static-site
+  
+  GKE_CLUSTER: i4t-cluster   
   NGINX_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
