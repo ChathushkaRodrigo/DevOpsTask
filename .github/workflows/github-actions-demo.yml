@@ -51,7 +51,7 @@ jobs:
 
     # Pull the Docker Image
     - name: Pull Nginx Docker image
-          run: docker pull nginx:latest
+      run: docker pull nginx:latest
   
 
 
