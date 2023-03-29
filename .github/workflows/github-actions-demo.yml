@@ -16,7 +16,7 @@ on:
 
 env:
   
-  GKE_CLUSTER: i4t-cluster2 
+  GKE_CLUSTER: i4t-cluster   
   DOCKER_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
@@ -38,12 +38,11 @@ jobs:
     # helper for authentication
     - run: |-
         gcloud --quiet auth configure-docker
-
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
       with:
-        cluster_name: i4t-cluster2
-        location: us-central1
+        cluster_name: i4t-cluster
+        location: us-central1-c 
         credentials: ${{ secrets.GCP_SA_KEY }}
 
     # Pull the Docker Image
@@ -51,7 +50,7 @@ jobs:
       run: docker pull ${{  env.DOCKER_IMAGE }}
 
     # View the docker image
-    - name: List all docker images to verify creation
+    - name: LS docker image
       run: docker images
     
     # Push the docker image to GCP Cluster Registry 
@@ -64,9 +63,3 @@ jobs:
         gcloud auth configure-docker
         docker tag nginx:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
         docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$TAG
-
-    
-  
-
-
-   
