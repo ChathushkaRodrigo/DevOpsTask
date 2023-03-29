@@ -46,6 +46,7 @@ jobs:
         location: us-central1-c 
         credentials: ${{ secrets.GCP_SA_KEY }}
 
+
     # Pull the Docker Image
     - name: Pull Nginx Docker image
       run: docker pull ${{  env.DOCKER_IMAGE }}
