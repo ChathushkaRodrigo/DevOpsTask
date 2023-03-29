@@ -52,6 +52,10 @@ jobs:
     # Pull the Docker Image
     - name: Pull Nginx Docker image
       run: docker pull nginx:latest
+
+    # View the docker image
+    - name: LS docker image
+      run: docker images
   
 
 
