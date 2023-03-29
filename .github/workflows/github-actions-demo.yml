@@ -1,4 +1,4 @@
-name: Deploy Nginx Docker Image to GKE
+name: Deploy to GKE
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  GKE_CLUSTER_NAME: i4t-cluster
-  DOCKER_IMAGE_NAME: nginx:latest
+  GKE_CLUSTER: i4t-cluster
+  NGINX_IMAGE: nginx:latest
 
 jobs:
   deploy:
@@ -15,32 +15,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Checkout setup-gcloud action
-        uses: actions/checkout@v2
-        with:
-          repository: GoogleCloudPlatform/github-actions
-          ref: v0.3.0
-          path: .github/actions/setup-gcloud
-
-      - name: Authenticate with Google Cloud
-        uses: .github/actions/setup-gcloud
+      
+      - name: Set up GKE
+        uses: GoogleCloudPlatform/github-actions/setup-gke@master
         with:
           project_id: i4t-task-by-chathushka-rodrigo
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-
-      - name: Configure Docker
-        uses: docker/setup-buildx-action@v1
+          zone: us-central1-c
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}
+          tags: ${{ env.NGINX_IMAGE }}
 
-      - name: Update Kubernetes Deployment
-        run: |
-          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER_NAME }}
-          kubectl set image deployment/nginx-deployment nginx=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}
+      - name: Deploy to GKE
+        uses: GoogleCloudPlatform/github-actions/deploy-gke@master
+        with:
+          project_id: i4t-task-by-chathushka-rodrigo
+          zone: us-central1-c
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          image_path: ${{ env.NGINX_IMAGE }}
+          container_name: nginx
+          container_port: 80
