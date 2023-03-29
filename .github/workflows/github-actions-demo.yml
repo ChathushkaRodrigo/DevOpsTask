@@ -20,7 +20,7 @@ env:
   GKE_ZONE: us-central1-c   # Add your cluster zone here.
   DEPLOYMENT_NAME: test-deployment # Add your deployment name here.
   IMAGE: static-site
-   NGINX_IMAGE: nginx:latest
+  NGINX_IMAGE: nginx:latest
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
@@ -56,6 +56,6 @@ jobs:
           context: .
           push: true
           tags: ${{ env.NGINX_IMAGE }}
-          
+
 
    
