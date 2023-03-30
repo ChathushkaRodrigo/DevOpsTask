@@ -1,4 +1,4 @@
-name: Build and Deploy to GKE
+name: Build and Deploy Nginx Image to GKE
 
 on:
   push:
